@@ -1,6 +1,7 @@
 package com.shtand.imageanalyzer.springdesktopapp.vaadin;
 
 import com.shtand.imageanalyzer.springdesktopapp.image.ImageManager;
+import com.shtand.imageanalyzer.springdesktopapp.image.PlaygroundImage;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -11,13 +12,12 @@ import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 
+import java.io.ByteArrayInputStream;
+
 @Route
 public class MainView extends VerticalLayout {
 
     private final ImageManager imageManager;
-
-
-
     private Button loadButton;
     private Image image;
 
@@ -38,7 +38,8 @@ public class MainView extends VerticalLayout {
 
         upload.addSucceededListener(event -> {
             imageManager.addImage(buffer.getFileData().getFileName(), buffer.getInputStream());
-            image.setSrc(new StreamResource(event.getFileName(), () -> buffer.getInputStream()));
+            PlaygroundImage image = imageManager.getLastImage();
+            this.image.setSrc(new StreamResource(image.getFileName(), () -> new ByteArrayInputStream(image.getBytes())));
         });
         return upload;
     }
