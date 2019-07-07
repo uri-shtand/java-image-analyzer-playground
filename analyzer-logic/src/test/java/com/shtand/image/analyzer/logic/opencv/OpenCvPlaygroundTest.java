@@ -1,6 +1,7 @@
 package com.shtand.image.analyzer.logic.opencv;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,6 +11,10 @@ class OpenCvPlaygroundTest {
 
     @BeforeEach
     void setUp() {
-        openCvPlayground
+        openCvPlayground = new OpenCvPlayground();
+    }
+
+    @Test
+    public void testDoNothing() {
     }
 }
