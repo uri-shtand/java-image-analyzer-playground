@@ -1,5 +1,6 @@
 package com.shtand.imageanalyzer.springdesktopapp.vaadin;
 
+import com.shtand.imageanalyzer.springdesktopapp.image.ImageManager;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -13,17 +14,19 @@ import com.vaadin.flow.server.StreamResource;
 @Route
 public class MainView extends VerticalLayout {
 
+    private final ImageManager imageManager;
+
+
+
     private Button loadButton;
     private Image image;
 
-    public MainView() {
-//        add(new Button("Click me", e -> Notification.show("Hello Spring+Vaadin user!")));
+    public MainView(ImageManager imageManager) {
+        this.imageManager = imageManager;
         this.image = new Image();
-        this.loadButton = createLoadButton();
-//        createUpload(loadButton,null);
+        this.loadButton = createAnalyzeButton();
         Upload upload = createUpload();
         HorizontalLayout actions = new HorizontalLayout(loadButton);
-//
         add(image, upload, actions);
     }
 
@@ -34,14 +37,14 @@ public class MainView extends VerticalLayout {
         upload.setAcceptedFileTypes("image/jpeg", "image/png", "image/gif");
 
         upload.addSucceededListener(event -> {
+            imageManager.addImage(buffer.getFileData().getFileName(), buffer.getInputStream());
             image.setSrc(new StreamResource(event.getFileName(), () -> buffer.getInputStream()));
-
         });
         return upload;
     }
 
-    private Button createLoadButton() {
-        Button button = new Button("load image", VaadinIcon.BROWSER.create());
+    private Button createAnalyzeButton() {
+        Button button = new Button("analyze", VaadinIcon.BULLSEYE.create());
         return button;
     }
 }
