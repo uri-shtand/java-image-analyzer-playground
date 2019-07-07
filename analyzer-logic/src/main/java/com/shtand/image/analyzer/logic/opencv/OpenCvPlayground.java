@@ -1,8 +1,8 @@
 package com.shtand.image.analyzer.logic.opencv;
 
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.core.MatOfRect;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +17,6 @@ public class OpenCvPlayground {
     private CascadeClassifier faceCascade;
 
     public OpenCvPlayground() {
-        log.warn("Init openCV playground");
-        nu.pattern.OpenCV.loadShared();
-        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
-        log.warn("openCV playground loaded");
         faceCascade = loadHaarcascade();
     }
 
@@ -32,8 +28,14 @@ public class OpenCvPlayground {
         return cascadeClassifier;
     }
 
-    public Mat loadImageToMatrix(byte[] bytes) {
-        Mat mat = Imgcodecs.imdecode(new MatOfByte(bytes), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
-        return mat;
+    public Mat convertToGrayscale(Mat image) {
+        Mat grayImage = new Mat();
+        Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
+        return grayImage;
+    }
+
+    public void detectFaceWithCascade(Mat image) {
+        MatOfRect faces = new MatOfRect();
+        this.faceCascade.detectMultiScale(image, faces);
     }
 }
