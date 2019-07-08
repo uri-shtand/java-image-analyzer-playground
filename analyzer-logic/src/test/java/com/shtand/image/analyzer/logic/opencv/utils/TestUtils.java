@@ -13,11 +13,15 @@ import java.net.URL;
 public class TestUtils {
     private static final Logger log = LoggerFactory.getLogger(TestUtils.class);
 
-    public static Mat readImageFromResource(String resourceName) throws IOException {
-        URL resource = TestUtils.class.getResource(resourceName);
-        log.info("Loading image from {}", resource.getFile());
-        byte[] bytes = IOUtils.toByteArray(resource);
-        return Imgcodecs.imdecode(new MatOfByte(bytes), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
+    public static Mat readImageFromResource(String resourceName) {
+        try {
+            URL resource = TestUtils.class.getResource(resourceName);
+            log.info("Loading image from {}", resource.getFile());
+            byte[] bytes = IOUtils.toByteArray(resource);
+            return Imgcodecs.imdecode(new MatOfByte(bytes), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read image from resource", e);
+        }
     }
 
 }
