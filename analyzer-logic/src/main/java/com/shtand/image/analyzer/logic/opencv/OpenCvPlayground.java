@@ -29,6 +29,7 @@ public class OpenCvPlayground {
     }
 
     public Mat convertToGrayscale(Mat image) {
+        log.info("Converting image with {} total and {} channels  to grayscale", image.total(), image.channels());
         Mat grayImage = new Mat();
         Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
         return grayImage;
